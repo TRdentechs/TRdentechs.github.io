@@ -12,7 +12,9 @@
 
 PRIZM prizm;          // Instantiate an object named prizm
 float cmCalc = 360/12;  //calculation for number_of_cm_to_go*cmCalcint cm1 = 305;
-int cm1 = 305;
+int cm1 = 310;
+int cm2 = 170;
+int cm3 = 160;
 
 
 
@@ -26,13 +28,28 @@ void setup() {
 void loop() {
  
   prizm.setMotorDegree(1,400,(cmCalc*cm1));  //first straight
-  prizm.setMotorDegree(2,400,(-cmCalc*cm1));
-  delay(1000*cmCalc*cm1/400+1000);
-
-  prizm.setMotorDegree(1,400,1645); //315* turn
-  delay(1000*1645/400+1000);
-`
+  prizm.setMotorDegree(2,400,-(cmCalc*cm1));
+  while (prizm.readMotorBusy(1)==1){}
+  prizm.resetEncoders();
+   
+  prizm.setMotorDegree(2,400,-2200); //315* turn
+  while (prizm.readMotorBusy(2)==1){}
+  prizm.resetEncoders();
  
+  prizm.setMotorDegree(1,400,(cmCalc*cm2));  //second straight
+  prizm.setMotorDegree(2,400,-(cmCalc*cm2));
+  while (prizm.readMotorBusy(1)==1){}
+  prizm.resetEncoders();
+
+  prizm.setMotorDegree(1,400,2200); //315* turn
+  while (prizm.readMotorBusy(1)==1){}
+  prizm.resetEncoders();
+
+  prizm.setMotorDegree(1,400,(cmCalc*cm3));  //third straight
+  prizm.setMotorDegree(2,400,-(cmCalc*cm3));
+  while (prizm.readMotorBusy(1)==1){}
+  prizm.resetEncoders();
+  
   prizm.PrizmEnd();     // end program
  
 }
