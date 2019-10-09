@@ -14,7 +14,7 @@ PRIZM prizm;          // Instantiate an object named prizm
 float cmCalc = 360/12;  //calculation for number_of_cm_to_go*cmCalcint cm1 = 305;
 int cm1 = 310;
 int cm2 = 180;
-float cm3 = 157.5;
+int cm3 = 156;
 
 
 
