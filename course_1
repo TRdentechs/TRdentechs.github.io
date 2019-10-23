@@ -1,4 +1,3 @@
-
 #include <PRIZM.h>  // Include PRIZM Library
 PRIZM prizm;
 
@@ -13,16 +12,17 @@ prizm.PrizmBegin(); // Initiates the PRIZM controller
 void loop() {
 if (turnNumber == 0){
   prizm.setMotorPowers(50,-50);
-  
+
   if(prizm.readLineSensor(3) == 1){
     prizm.setMotorPowers(125,125);
 
     delay(1000);
-    
-    prizm.setMotorDegree(1,400,2940); //315* turn
-    while (prizm.readMotorBusy(1)==1){}
+
     prizm.resetEncoders();
-    turnNumber=turnNumber+1;
+    prizm.setMotorDegree(1,400,1470);
+    while (prizm.readMotorBusy(1)==1){}
+     prizm.resetEncoders();
+     turnNumber=turnNumber+1;
   }
 }
 
