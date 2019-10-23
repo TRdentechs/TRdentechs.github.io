@@ -1,55 +1,39 @@
-/* Implement PID control of TETRIX motors equipped with encoders using the PRIZM controller.
- * The recommended DC motor is the TETRIX TorqueNADO - part number 44260.
- * This example demonstrates how to use constant speed functions to accurately
- * spin a DC motor + encoder at a constant speed rate in degrees per second.
- * For more detailed information on using the PRIZM library functions,
- * Please see the Arduino Library functions grid in the TETRIX PRIZM Programmer's guide
- * which can be viewed and downloaded at www.TETRIXRobotics.com
- */
+#include <PRIZM.h>  // Include PRIZM Library
+PRIZM prizm;
 
-
-#include <PRIZM.h>    // Include PRIZM Library
-
-PRIZM prizm;          // Instantiate an object named prizm
-float cmCalc = 360/12;  //calculation for number_of_cm_to_go*cmCalcint cm1 = 305;
-int cm1 = 310;
-int cm2 = 180;
-int cm3 = 156;
-
-
-
+//variables
+int turnNumber = 0;
 
 void setup() {
-
-  prizm.PrizmBegin(); // Initiates the PRIZM controller - must be called in the setup of each PRIZM sketch
+prizm.PrizmBegin(); // Initiates the PRIZM controller
 
 }
 
 void loop() {
- 
-  prizm.setMotorDegree(1,400,(cmCalc*cm1));  //first straight
-  prizm.setMotorDegree(2,400,-(cmCalc*cm1));
-  while (prizm.readMotorBusy(1)==1){}
-  prizm.resetEncoders();
-   
-  prizm.setMotorDegree(2,400,-2350); //315* turn
-  while (prizm.readMotorBusy(2)==1){}
-  prizm.resetEncoders();
- 
-  prizm.setMotorDegree(1,400,(cmCalc*cm2));  //second straight
-  prizm.setMotorDegree(2,400,-(cmCalc*cm2));
-  while (prizm.readMotorBusy(1)==1){}
-  prizm.resetEncoders();
+if (turnNumber == 0){
+  prizm.setMotorPowers(50,-50);
 
-  prizm.setMotorDegree(1,400,2350); //315* turn
-  while (prizm.readMotorBusy(1)==1){}
-  prizm.resetEncoders();
+  if(prizm.readLineSensor(3) == 1){
+    prizm.setMotorPowers(125,125);
 
-  prizm.setMotorDegree(1,400,(cmCalc*cm3));  //third straight
-  prizm.setMotorDegree(2,400,-(cmCalc*cm3));
-  while (prizm.readMotorBusy(1)==1){}
-  prizm.resetEncoders();
-  
-  prizm.PrizmEnd();     // end program
- 
-} 
+    delay(1000);
+
+    prizm.resetEncoders();
+    prizm.setMotorDegree(1,400,1470);
+    while (prizm.readMotorBusy(1)==1){}
+     prizm.resetEncoders();
+     turnNumber=turnNumber+1;
+  }
+}
+
+if (turnNumber==1){
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==10){
+    prizm.setMotorPowers(125,125);
+    turnNumber=turnNumber+1;
+  }
+}
+
+
+}
