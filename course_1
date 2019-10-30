@@ -37,8 +37,14 @@ if (turnNumber==1){
     turnNumber=turnNumber+1;
   }
 }
+if (turnNumber==2){
+  prizm.setMotorDegrees(400,-1425,400,1425);
+  prizm.setMotorPowers(50,-50);
 
+  if(prizm.readSonicSensorCM(2)==10){
+    prizm.setMotorPowers(125,125);
+    turnNumber=turnNumber+1;
  
-
-
+  }
+} 
 }
