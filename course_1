@@ -19,8 +19,10 @@ if (turnNumber == 0){
     delay(1000);
     
     prizm.resetEncoders();
-    prizm.setMotorDegrees(200,400,200,-400);
-    prizm.setMotorDegree(1,400,1470);
+    prizm.setMotorDegrees(200,410,-200,-410 );
+  delay(2000);
+    prizm.resetEncoders();    
+    prizm.setMotorDegree(1,400,1425);
     while (prizm.readMotorBusy(1)==1){}
      prizm.resetEncoders();
      turnNumber=turnNumber+1;
