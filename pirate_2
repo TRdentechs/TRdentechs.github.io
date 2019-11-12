@@ -1,0 +1,112 @@
+#include <PRIZM.h>  // Include PRIZM Library
+PRIZM prizm;
+
+//variables
+int turnNumber = 0;
+
+void setup() {
+prizm.PrizmBegin(); // Initiates the PRIZM controller
+
+}
+
+void loop() {
+if (turnNumber == 0){
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readLineSensor(4) == 1){
+    prizm.setMotorPowers(125,125);
+
+    delay(1000);
+    
+    prizm.resetEncoders();
+    prizm.setMotorDegrees(200,420,-200,-420);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();    
+    prizm.setMotorDegree(1,200,1425);
+    while (prizm.readMotorBusy(1)==1){}
+
+     prizm.resetEncoders();
+     turnNumber=turnNumber+1;
+  }
+}
+
+if (turnNumber==1){
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==6){
+    prizm.setMotorPowers(125,125);
+  prizm.resetEncoders();
+
+    prizm.setMotorDegrees(200,711,200,711);
+    while (prizm.readMotorBusy(1)==1){}
+  prizm.resetEncoders();
+
+    turnNumber=turnNumber+1;
+  }
+}
+if (turnNumber==2){
+
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==15){
+    prizm.setMotorPowers(125,125);
+   
+    prizm.resetEncoders();
+    prizm.setMotorDegrees(200,1425,0,0);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();
+    turnNumber=turnNumber+1;
+ 
+  }
+} 
+
+if (turnNumber==3){
+
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==6){
+    prizm.setMotorPowers(125,125);
+   
+    prizm.resetEncoders();
+    prizm.setMotorDegrees(-200,-713,-200,-713);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();
+    turnNumber=turnNumber+1;
+ 
+  }
+} 
+
+
+if (turnNumber==4){
+
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==6 ){
+    prizm.setMotorPowers(125,125);
+   
+    prizm.resetEncoders();
+    prizm.setMotorDegrees(-200,-770,-200,-770);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();
+    turnNumber=turnNumber+1;
+ 
+  }
+} 
+
+
+if (turnNumber==5){
+
+  prizm.setMotorPowers(50,-50);
+
+  if(prizm.readSonicSensorCM(2)==10){
+    prizm.setMotorPowers(125,125);
+   
+    prizm.resetEncoders();
+    prizm.setMotorDegrees(200,715,200,715);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();
+    turnNumber=turnNumber+1;
+ 
+  }
+} 
+}
