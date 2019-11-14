@@ -1,4 +1,4 @@
-#include <PRIZM.h>  // Include PRIZM Library
+ #include <PRIZM.h>  // Include PRIZM Library
 PRIZM prizm;
 
 //variables
@@ -10,6 +10,7 @@ prizm.PrizmBegin(); // Initiates the PRIZM controller
 }
 
 void loop() {
+
 if (turnNumber == 0){
   prizm.setMotorPowers(50,-50);
 
@@ -68,8 +69,8 @@ if (turnNumber==3){
     prizm.setMotorPowers(125,125);
    
     prizm.resetEncoders();
-    prizm.setMotorDegrees(-200,-713,-200,-713);
-    while (prizm.readMotorBusy(1)==1){}
+    prizm.setMotorDegrees(-200,-715,-200,-715);
+    while (prizm.readMotorBusy(1)==1){} 
     prizm.resetEncoders();
     turnNumber=turnNumber+1;
  
@@ -85,7 +86,7 @@ if (turnNumber==4){
     prizm.setMotorPowers(125,125);
    
     prizm.resetEncoders();
-    prizm.setMotorDegrees(-200,-770,-200,-770);
+    prizm.setMotorDegrees(-200,-800,-200,-800);
     while (prizm.readMotorBusy(1)==1){}
     prizm.resetEncoders();
     turnNumber=turnNumber+1;
@@ -98,15 +99,35 @@ if (turnNumber==5){
 
   prizm.setMotorPowers(50,-50);
 
-  if(prizm.readSonicSensorCM(2)==10){
+  if(prizm.readSonicSensorCM(2)==5 ){
     prizm.setMotorPowers(125,125);
    
     prizm.resetEncoders();
     prizm.setMotorDegrees(200,715,200,715);
     while (prizm.readMotorBusy(1)==1){}
     prizm.resetEncoders();
+    
+    prizm.setMotorDegrees(400,1000,-400,-1000);
+    while (prizm.readMotorBusy(1)==1){}
+    prizm.resetEncoders();
     turnNumber=turnNumber+1;
  
   }
-} 
+}
+
+if (turnNumber==6){
+
+  // beam reflected, no line detected
+  if(prizm.readLineSensor(3) == 0){prizm.setMotorPowers(-125,-30); prizm.setRedLED(LOW);}  
+
+  // no relected beam, line detected
+  if(prizm.readLineSensor(3) == 1){prizm.setMotorPowers(30,125); prizm.setRedLED(HIGH);} 
+
+  if (prizm.readSonicSensorCM(2)==20 ){
+
+    turnNumber=turnNumber+1;
+  }
+
+  
+}
 }
