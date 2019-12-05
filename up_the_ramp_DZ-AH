@@ -1,22 +1,46 @@
-#include <PRIZM.h>  // Include PRIZM Library
-PRIZM prizm;
+/*  PRIZM Controller example program
+ *  This program implements line following with the TaskBot. Using the line finder sensor   
+ *  on sensor port D3, the robot will follow the edge of a black stripe on a white surface. 
+ *  The DC drive motors will power one motor at a time resulting in back and forth forward motion to
+ *  keep the robot traversing the line edge.
+ *  author PWU 08/05/2016
+ */
 
+  #include <PRIZM.h>     // include PRIZM library
+  PRIZM prizm;           // instantiate a PRIZM object “prizm” so we can use its functions
+  int turnNumber = 0;
 void setup() {
-prizm.PrizmBegin(); // Initiates the PRIZM controller
 
+  prizm.PrizmBegin();   // initialize PRIZM
+
+  prizm.setMotorInvert(1,1);      // invert the direction of DC Motor 1
+                                  // to harmonize the direction of
+                                  // opposite facing drive motors
 }
 
 void loop() {
+if(turnNumber==0){
+  // beam reflected, no line detected
+  if(prizm.readSonicSensorCM(2) < 7){prizm.setMotorPowers(-15,-10); prizm.setRedLED(LOW);}  
 
-  prizm.setMotorPowers(25,-24);     //when turn counter is set to 0 go forward until line is detected
+  // no relected beam, line detected
+  if(prizm.readSonicSensorCM(2) > 7){prizm.setMotorPowers(-10,-15); prizm.setRedLED(HIGH);} 
+  if(prizm.readLineSensor(4)==1){
+    turnNumber++;
+  }
+}
 
-  if(prizm.readLineSensor(4) == 1){
-prizm.setMotorPowers(125,125);
-prizm.setMotorDegrees(-200,0,200,0);
-while(prizm.readMotorBusy(1)==1){}
-prizm.PrizmEnd();
- 
-
-  
+if(turnNumber==1){
+  // beam reflected, no line detected
+  prizm.setMotorDegrees(200,0,200,0);
+  while(prizm.readMotorBusy(1)==1){}
+  prizm.PrizmEnd();
+ // }
 }
 }
+
+
+
+
+
+
