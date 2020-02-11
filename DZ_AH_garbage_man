@@ -1,0 +1,40 @@
+#include <PRIZM.h>
+PRIZM prizm; 
+int Step = 0;
+
+//variables
+void setup() {
+  // put your setup code here, to run once:
+  prizm.PrizmBegin();
+Serial.begin(9600);
+  prizm.setServoSpeed(2,25);
+  prizm.setServoSpeed(1,25);
+  prizm.setMotorInvert(1,1);
+
+}
+
+void loop() {
+ 
+  if (Step == 0) {
+    if ( prizm.readLineSensor(3) == 1 ){
+      prizm.setMotorPowers(20,-10);
+    }  
+    
+    if ( prizm.readLineSensor(3) == 0 ){
+      prizm.setMotorPowers(-10,20);
+    }
+
+    if ( prizm.readSonicSensorCM(2) < 24 ){
+      Step++;
+    }
+  }
+
+  if ( Step == 1) {
+    prizm.setMotorPowers (125,125);
+  }
+ 
+ 
+ 
+ 
+ 
+ }
