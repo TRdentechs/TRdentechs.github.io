@@ -1,36 +1,60 @@
-#include <PRIZM.h>
-PRIZM prizm; 
-int Step = 0;
+#include <PRIZM.h>    //include Prizm library
+PRIZM prizm;    //create call for library
+int Step = 0;   //set up call number
 
 //variables
 void setup() {
-  // put your setup code here, to run once:
-  prizm.PrizmBegin();
-Serial.begin(9600);
-  prizm.setServoSpeed(2,25);
+  prizm.PrizmBegin();            //begin code
+  prizm.setServoSpeed(2,25);     //set servo speeds
   prizm.setServoSpeed(1,25);
-  prizm.setMotorInvert(1,1);
-
+  prizm.setMotorInvert(1,1);     //invert motors to unify the motors to move in one unifrom direction
+delay(1000);
+prizm.setServoPosition(1,100);  //open up and lift up pick up arm
+prizm.setServoPosition(2,90);
+delay(2000);
 }
 
 void loop() {
  
-  if (Step == 0) {
-    if ( prizm.readLineSensor(3) == 1 ){
+  if (Step == 0) {  //if loop to use call number and begin the line follower process
+    if ( prizm.readLineSensor(3) == 1 ){    //if line sensor sensed a line, turn right
       prizm.setMotorPowers(20,-10);
     }  
     
-    if ( prizm.readLineSensor(3) == 0 ){
+    if ( prizm.readLineSensor(3) == 0 ){    //if line sensor does not sense line, turn left
       prizm.setMotorPowers(-10,20);
     }
 
-    if ( prizm.readSonicSensorCM(2) < 24 ){
+    if ( prizm.readSonicSensorCM(2) < 18 ){     //if the ultrasonic sensor sees a box, change the call number
       Step++;
     }
   }
 
-  if ( Step == 1) {
-    prizm.setMotorPowers (125,125);
+  if ( Step == 1) {     //tells the robot to procede with the next step in the process
+    prizm.setMotorPowers (125,125);    //Stop the robot
+    prizm.resetEncoders();
+
+    prizm.setServoPosition(1,5);    //lower the arm to dumpster box level
+    while(prizm.readServoPosition(1) != 5){}    //If the arm is not fully lowered, wait until arm is in position
+    
+    prizm.setMotorDegrees(720,250,720,200);   //Move the robot forward to catch the box in the arm and slightly right
+    while(prizm.readMotorBusy(1) ==1){}     // if the motors are moving, wait
+    
+    prizm.setServoPosition(2,0);    //close the grabbing arm
+    delay(3500);    //wait for 3.5 seconds
+    prizm.setServoPosition(1,180);    //raise the arm to pour box contents into cup
+    delay(3000);    //wait for 3 seconds
+    prizm.setServoPosition(1,0);    //lower the arm back down to box level
+    delay(2000);    //wait for 2 seconds
+    prizm.setServoPosition(2,90);   //open the grabber arm
+    delay(3000);    //wait for 3 seconds 
+    prizm.setServoPosition(1,100);  //raise arm to completely let go of box
+    delay(3000);  //wait for 3 seconds
+
+    prizm.resetEncoders();  //reset motors of the robot for accurate movement
+    prizm.setMotorDegrees(40,220,40,200);   //move forwardslowly to stay on the liuine with a straight path of movement
+    while( prizm.readMotorBusy(1) == 1){}   //if the motors are busy, wait
+    Step = 0;   //reset process and continue on
   }
  
  
